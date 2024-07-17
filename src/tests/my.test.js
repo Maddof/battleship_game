@@ -37,6 +37,42 @@ describe("Gameboard class", () => {
     expect(gameboard.board[1][0]).toBeInstanceOf(Ship);
     expect(gameboard.board[2][0]).toBeInstanceOf(Ship);
   });
+
+  test("should record a hit on a ship", () => {
+    gameboard.placeShip(3, 0, 0, true);
+    const success = gameboard.receiveAttack(0, 0);
+    expect(success).toBe(true);
+    expect(gameboard.board[0][0].hits).toBe(1);
+  });
+
+  test("should record a miss", () => {
+    gameboard.placeShip(3, 0, 0, true);
+    const success = gameboard.receiveAttack(1, 1);
+    expect(success).toBe(false);
+    expect(gameboard.board[1][1]).toBe("miss");
+    expect(gameboard.missedAttacks).toContainEqual({ x: 1, y: 1 });
+  });
+
+  test("should report true when all ships sunk", () => {
+    gameboard.placeShip(1, 0, 0, true);
+    gameboard.placeShip(2, 1, 1, false);
+
+    const attack = gameboard.receiveAttack(0, 0);
+    const attack2 = gameboard.receiveAttack(1, 1);
+    const attack3 = gameboard.receiveAttack(1, 2);
+
+    expect(gameboard.allShipsSunk()).toBe(true);
+  });
+
+  test("should report false when all ships are NOT sunk", () => {
+    gameboard.placeShip(1, 0, 0, true);
+    gameboard.placeShip(2, 1, 1, false);
+
+    const attack = gameboard.receiveAttack(0, 0);
+    const attack2 = gameboard.receiveAttack(1, 1);
+
+    expect(gameboard.allShipsSunk()).toBe(false);
+  });
 });
 
 describe("Ship class", () => {

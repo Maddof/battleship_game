@@ -19,6 +19,7 @@ class Gameboard {
   constructor() {
     this.board = this.createBoard();
     this.ships = [];
+    this.missedAttacks = [];
   }
   createBoard() {
     const rows = 10;
@@ -35,6 +36,8 @@ class Gameboard {
     return board;
   }
 
+  // Places and checks if it can place a ship
+  // Returns true if placed
   placeShip(length, startX, startY, isHorizontal) {
     const ship = new _ships__WEBPACK_IMPORTED_MODULE_0__.Ship(length);
     if (this.canPlaceShip(length, startX, startY, isHorizontal)) {
@@ -54,6 +57,7 @@ class Gameboard {
 
   canPlaceShip(length, startX, startY, isHorizontal) {
     if (isHorizontal) {
+      // If it exceeds the gameboard return false
       if (startX + length > 10) return false;
       for (let i = 0; i < length; i++) {
         if (this.board[startY][startX + i] !== null) return false;
@@ -65,6 +69,23 @@ class Gameboard {
       }
     }
     return true;
+  }
+
+  receiveAttack(x, y) {
+    if (this.board[y][x] instanceof _ships__WEBPACK_IMPORTED_MODULE_0__.Ship) {
+      this.board[y][x].hit();
+      return true;
+    } else {
+      this.board[y][x] = "miss";
+      this.missedAttacks.push({ x, y });
+      return false;
+    }
+  }
+
+  allShipsSunk() {
+    if (this.ships.every((ship) => ship.sunk) == false) {
+      return false;
+    } else return true;
   }
 }
 
@@ -214,14 +235,24 @@ sayHello();
 
 const gameboard = new _modules_gameboard__WEBPACK_IMPORTED_MODULE_1__.Gameboard();
 const success = gameboard.placeShip(3, 0, 0, true); // Place a horizontal ship of length 3 at (0, 0)
+const success2 = gameboard.placeShip(2, 2, 1, false); // Place a vertical ship of length 2 at (2, 1)
+
 console.log(success); // true if the ship was placed successfully
 console.log(gameboard.board); // The board state with the ship placed
 
-const myship = new _modules_ships__WEBPACK_IMPORTED_MODULE_2__.Ship(2);
+console.log(gameboard.ships);
 
-console.log(myship.hits);
-console.log(myship.isSunk());
-console.log(myship.length);
+const attackResult1 = gameboard.receiveAttack(0, 0); // Should be a hit
+const attackResult2 = gameboard.receiveAttack(1, 1); // Should be a miss
+console.log(attackResult1); // true
+console.log(attackResult2); // false
+console.log(gameboard.board); // The board state with hits and misses
+
+console.log(gameboard.missedAttacks);
+
+console.log(gameboard.ships);
+
+console.log(gameboard.allShipsSunk());
 
 console.log("test");
 

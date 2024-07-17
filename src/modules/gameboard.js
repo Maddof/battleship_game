@@ -4,6 +4,7 @@ class Gameboard {
   constructor() {
     this.board = this.createBoard();
     this.ships = [];
+    this.missedAttacks = [];
   }
   createBoard() {
     const rows = 10;
@@ -20,6 +21,8 @@ class Gameboard {
     return board;
   }
 
+  // Places and checks if it can place a ship
+  // Returns true if placed
   placeShip(length, startX, startY, isHorizontal) {
     const ship = new Ship(length);
     if (this.canPlaceShip(length, startX, startY, isHorizontal)) {
@@ -39,6 +42,7 @@ class Gameboard {
 
   canPlaceShip(length, startX, startY, isHorizontal) {
     if (isHorizontal) {
+      // If it exceeds the gameboard return false
       if (startX + length > 10) return false;
       for (let i = 0; i < length; i++) {
         if (this.board[startY][startX + i] !== null) return false;
@@ -50,6 +54,23 @@ class Gameboard {
       }
     }
     return true;
+  }
+
+  receiveAttack(x, y) {
+    if (this.board[y][x] instanceof Ship) {
+      this.board[y][x].hit();
+      return true;
+    } else {
+      this.board[y][x] = "miss";
+      this.missedAttacks.push({ x, y });
+      return false;
+    }
+  }
+
+  allShipsSunk() {
+    if (this.ships.every((ship) => ship.sunk) == false) {
+      return false;
+    } else return true;
   }
 }
 
