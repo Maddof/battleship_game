@@ -1,0 +1,1 @@
+{"version":3,"file":"main.css","mappings":";;;AAAA;EACE,+BAA+B;AACjC","sources":["webpack://battleship/./src/style.css"],"sourcesContent":["body {\n  background-color: rebeccapurple;\n}\n"],"names":[],"sourceRoot":""}
