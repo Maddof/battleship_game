@@ -1,0 +1,36 @@
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  background-color: rebeccapurple;
+}
+
+.main-sec {
+  width: 100%;
+}
+
+.main-wrap {
+  margin-inline: auto;
+  display: flex;
+  justify-content: space-evenly;
+  gap: 2rem;
+}
+
+#player-form-name {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.player_board,
+.comp_board {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  border: 1px solid black;
+}
+
+.player-cell,
+.comp-cell {
+  min-width: 30px;
+  min-height: 30px;
+  border: 1px solid black;
+}
