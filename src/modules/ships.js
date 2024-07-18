@@ -17,6 +17,4 @@ class Ship {
   }
 }
 
-let ship1 = new Ship(3, 0, false);
-
 export { Ship };
