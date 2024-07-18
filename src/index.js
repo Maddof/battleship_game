@@ -1,6 +1,7 @@
 import { sayGoodBye } from "./modules/saygoodbye";
 import { Gameboard } from "./modules/gameboard";
 import { Ship } from "./modules/ships";
+import { Player } from "./modules/players";
 
 function sayHello() {
   console.log("Hello world");
@@ -35,5 +36,11 @@ console.log(gameboard.missedAttacks);
 console.log(gameboard.ships);
 
 console.log(gameboard.allShipsSunk());
+
+const newPlayer = new Player();
+
+console.log(newPlayer.winner);
+
+console.log(newPlayer.playerBoard);
 
 console.log("test");

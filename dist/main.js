@@ -94,6 +94,31 @@ class Gameboard {
 
 /***/ }),
 
+/***/ "./src/modules/players.js":
+/*!********************************!*\
+  !*** ./src/modules/players.js ***!
+  \********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Player: () => (/* binding */ Player)
+/* harmony export */ });
+/* harmony import */ var _gameboard__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./gameboard */ "./src/modules/gameboard.js");
+
+
+class Player {
+  constructor() {
+    this.playerBoard = new _gameboard__WEBPACK_IMPORTED_MODULE_0__.Gameboard();
+    this.winner = false;
+  }
+}
+
+
+
+
+/***/ }),
+
 /***/ "./src/modules/saygoodbye.js":
 /*!***********************************!*\
   !*** ./src/modules/saygoodbye.js ***!
@@ -216,6 +241,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_saygoodbye__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/saygoodbye */ "./src/modules/saygoodbye.js");
 /* harmony import */ var _modules_gameboard__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/gameboard */ "./src/modules/gameboard.js");
 /* harmony import */ var _modules_ships__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/ships */ "./src/modules/ships.js");
+/* harmony import */ var _modules_players__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/players */ "./src/modules/players.js");
+
 
 
 
@@ -253,6 +280,12 @@ console.log(gameboard.missedAttacks);
 console.log(gameboard.ships);
 
 console.log(gameboard.allShipsSunk());
+
+const newPlayer = new _modules_players__WEBPACK_IMPORTED_MODULE_3__.Player();
+
+console.log(newPlayer.winner);
+
+console.log(newPlayer.playerBoard);
 
 console.log("test");
 
