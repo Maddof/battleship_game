@@ -14,6 +14,44 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./src/modules/game.js":
+/*!*****************************!*\
+  !*** ./src/modules/game.js ***!
+  \*****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   resetGame: () => (/* binding */ resetGame),
+/* harmony export */   startGame: () => (/* binding */ startGame)
+/* harmony export */ });
+/* harmony import */ var _ui_comp__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ui_comp */ "./src/modules/ui_comp.js");
+/* harmony import */ var _ui_player__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ui_ player */ "./src/modules/ui_ player.js");
+
+
+
+const compBoardWrapper = document.querySelector(".comp_board");
+const playerBoardWrapper = document.querySelector(".player_board");
+
+function resetGame() {
+  compBoardWrapper.innerHTML = "";
+  playerBoardWrapper.innerHTML = "";
+  _ui_comp__WEBPACK_IMPORTED_MODULE_0__.compPlayer.winner = false;
+  _ui_player__WEBPACK_IMPORTED_MODULE_1__.humanPlayer.winner = false;
+  _ui_comp__WEBPACK_IMPORTED_MODULE_0__.compPlayer.board.resetBoard();
+  _ui_player__WEBPACK_IMPORTED_MODULE_1__.humanPlayer.board.resetBoard();
+}
+
+function startGame() {
+  (0,_ui_comp__WEBPACK_IMPORTED_MODULE_0__.renderCompBoard)();
+  (0,_ui_player__WEBPACK_IMPORTED_MODULE_1__.renderPlayerBoard)();
+}
+
+
+
+
+/***/ }),
+
 /***/ "./src/modules/gameboard.js":
 /*!**********************************!*\
   !*** ./src/modules/gameboard.js ***!
@@ -32,6 +70,7 @@ class Gameboard {
     this.board = this.createBoard();
     this.ships = [];
     this.missedAttacks = [];
+    this.hitAttacks = [];
   }
   createBoard() {
     const rows = 10;
@@ -86,6 +125,7 @@ class Gameboard {
   receiveAttack(x, y) {
     if (this.board[y][x] instanceof _ships__WEBPACK_IMPORTED_MODULE_0__.Ship) {
       this.board[y][x].hit();
+      this.hitAttacks.push({ x, y }); // Add to hit coordinates
       return true;
     } else {
       this.board[y][x] = "miss";
@@ -103,12 +143,14 @@ class Gameboard {
   resetBoard() {
     this.ships.length = 0;
     this.missedAttacks.length = 0;
+    this.hitAttacks.length = 0;
     this.board = this.createBoard(); // Reset the board
   }
 
   isAlreadyAttacked(x, y) {
-    return this.missedAttacks.some(
-      (attack) => attack.x === x && attack.y === y
+    return (
+      this.missedAttacks.some((attack) => attack.x === x && attack.y === y) ||
+      this.hitAttacks.some((attack) => attack.x === x && attack.y === y)
     );
   }
 }
@@ -133,9 +175,32 @@ __webpack_require__.r(__webpack_exports__);
 
 class Player {
   constructor() {
-    this.playerBoard = new _gameboard__WEBPACK_IMPORTED_MODULE_0__.Gameboard();
+    this.board = new _gameboard__WEBPACK_IMPORTED_MODULE_0__.Gameboard();
     this.winner = false;
   }
+  // get board() {
+  //   return this.board.board;
+  // }
+
+  // placeShip(length, x, y, isHorizontal) {
+  //   return this.gameboard.placeShip(length, x, y, isHorizontal);
+  // }
+
+  // receiveAttack(x, y) {
+  //   return this.gameboard.receiveAttack(x, y);
+  // }
+
+  // allShipsSunk() {
+  //   return this.gameboard.allShipsSunk();
+  // }
+
+  // resetBoard() {
+  //   this.gameboard.resetBoard();
+  // }
+
+  // isAlreadyAttacked(x, y) {
+  //   return this.gameboard.isAlreadyAttacked(x, y);
+  // }
 }
 
 
@@ -185,18 +250,32 @@ class Ship {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   playerBoard: () => (/* binding */ playerBoard),
+/* harmony export */   humanPlayer: () => (/* binding */ humanPlayer),
 /* harmony export */   renderPlayerBoard: () => (/* binding */ renderPlayerBoard)
 /* harmony export */ });
-/* harmony import */ var _gameboard__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./gameboard */ "./src/modules/gameboard.js");
+/* harmony import */ var _players__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./players */ "./src/modules/players.js");
 
 
 const playerBoardWrapper = document.querySelector(".player_board");
 
-const playerBoard = new _gameboard__WEBPACK_IMPORTED_MODULE_0__.Gameboard();
+let humanPlayer = new _players__WEBPACK_IMPORTED_MODULE_0__.Player();
+
+function placePlayerShips() {
+  humanPlayer.board.placeShip(2, 0, 0, true);
+  humanPlayer.board.placeShip(3, 0, 1, true);
+  humanPlayer.board.placeShip(4, 0, 2, true);
+  humanPlayer.board.placeShip(5, 0, 3, true);
+  humanPlayer.board.placeShip(6, 0, 4, true);
+
+  // compBoard.placeShip(battleShip.length, 0, 1, true);
+  // compBoard.placeShip(destroyerShip.length, 0, 2, true);
+  // compBoard.placeShip(submarineShip.length, 0, 3, true);
+  // compBoard.placeShip(patrolboatShip.length, 0, 4, true);
+}
 
 function renderPlayerBoard() {
-  playerBoard.board.forEach((row, y) => {
+  placePlayerShips();
+  humanPlayer.board.board.forEach((row, y) => {
     row.forEach((cell, x) => {
       const gridCell = document.createElement("div");
       gridCell.classList.add("player-cell");
@@ -221,32 +300,34 @@ function renderPlayerBoard() {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   compPlayer: () => (/* binding */ compPlayer),
 /* harmony export */   renderCompBoard: () => (/* binding */ renderCompBoard)
 /* harmony export */ });
-/* harmony import */ var _gameboard__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./gameboard */ "./src/modules/gameboard.js");
-/* harmony import */ var _ships__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ships */ "./src/modules/ships.js");
-/* harmony import */ var _ui_player__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ui_ player */ "./src/modules/ui_ player.js");
+/* harmony import */ var _ships__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ships */ "./src/modules/ships.js");
+/* harmony import */ var _ui_player__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ui_ player */ "./src/modules/ui_ player.js");
+/* harmony import */ var _game__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./game */ "./src/modules/game.js");
+/* harmony import */ var _players__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./players */ "./src/modules/players.js");
+
 
 
 
 
 const compBoardWrapper = document.querySelector(".comp_board");
+const playerBoardWrapper = document.querySelector(".player_board");
 
-const carrierShip = new _ships__WEBPACK_IMPORTED_MODULE_1__.Ship(5);
-const battleShip = new _ships__WEBPACK_IMPORTED_MODULE_1__.Ship(4);
-const destroyerShip = new _ships__WEBPACK_IMPORTED_MODULE_1__.Ship(3);
-const submarineShip = new _ships__WEBPACK_IMPORTED_MODULE_1__.Ship(3);
-const patrolboatShip = new _ships__WEBPACK_IMPORTED_MODULE_1__.Ship(2);
+const carrierShip = new _ships__WEBPACK_IMPORTED_MODULE_0__.Ship(5);
+const battleShip = new _ships__WEBPACK_IMPORTED_MODULE_0__.Ship(4);
+const destroyerShip = new _ships__WEBPACK_IMPORTED_MODULE_0__.Ship(3);
+const submarineShip = new _ships__WEBPACK_IMPORTED_MODULE_0__.Ship(3);
+const patrolboatShip = new _ships__WEBPACK_IMPORTED_MODULE_0__.Ship(2);
 
-var compBoard = new _gameboard__WEBPACK_IMPORTED_MODULE_0__.Gameboard();
+var compPlayer = new _players__WEBPACK_IMPORTED_MODULE_3__.Player();
+
+console.log(compPlayer.board);
 
 function placeCompShips() {
-  console.log(compBoard.ships);
-
-  compBoard.resetBoard();
-  console.log(compBoard.ships);
-
-  compBoard.placeShip(2, 0, 0, true);
+  compPlayer.board.placeShip(2, 0, 0, true);
+  // compBoard.placeShip(2, 0, 0, true);
   // compBoard.placeShip(battleShip.length, 0, 1, true);
   // compBoard.placeShip(destroyerShip.length, 0, 2, true);
   // compBoard.placeShip(submarineShip.length, 0, 3, true);
@@ -255,8 +336,9 @@ function placeCompShips() {
 
 function renderCompBoard() {
   placeCompShips();
-  compBoardWrapper.innerHTML = "";
-  compBoard.board.forEach((row, y) => {
+  // compBoard.board.forEach((row, y) => {
+  // compPlayer.board.forEach((row, y) => {
+  compPlayer.board.board.forEach((row, y) => {
     row.forEach((cell, x) => {
       const gridCell = document.createElement("div");
       gridCell.classList.add("comp-cell");
@@ -275,7 +357,7 @@ const handleCellClick = (event) => {
   const x = parseInt(event.target.dataset.x);
   const y = parseInt(event.target.dataset.y);
   console.log(x + " " + y);
-  const attackResult = compBoard.receiveAttack(x, y);
+  const attackResult = compPlayer.board.receiveAttack(x, y);
   if (attackResult) {
     event.target.classList.add("hit");
   } else {
@@ -283,10 +365,12 @@ const handleCellClick = (event) => {
   }
   event.target.removeEventListener("click", handleCellClick); // Remove event listener after click to prevent re-click
 
-  if (compBoard.allShipsSunk()) {
-    console.log("All ships sunk");
+  if (compPlayer.board.allShipsSunk()) {
+    console.log("All comp ships sunk");
+    _ui_player__WEBPACK_IMPORTED_MODULE_1__.humanPlayer.winner = true;
     setTimeout(() => {
-      renderCompBoard();
+      (0,_game__WEBPACK_IMPORTED_MODULE_2__.resetGame)();
+      (0,_game__WEBPACK_IMPORTED_MODULE_2__.startGame)();
     }, 1000);
   }
   compAttack();
@@ -298,19 +382,15 @@ function compAttack() {
   let compYAttack;
   let attackResult;
 
-  const playerBoardWrapper = document.querySelector(".player_board");
-
-  let compAttack = { x: compXAttack, y: compYAttack };
-
   // Ensure unique attacks
   do {
     compXAttack = Math.floor(Math.random() * 10);
     compYAttack = Math.floor(Math.random() * 10);
-  } while (_ui_player__WEBPACK_IMPORTED_MODULE_2__.playerBoard.isAlreadyAttacked(compXAttack, compYAttack));
+  } while (_ui_player__WEBPACK_IMPORTED_MODULE_1__.humanPlayer.board.isAlreadyAttacked(compXAttack, compYAttack));
 
   console.log(`Computer attacks (${compXAttack}, ${compYAttack})`);
 
-  attackResult = _ui_player__WEBPACK_IMPORTED_MODULE_2__.playerBoard.receiveAttack(compXAttack, compYAttack);
+  attackResult = _ui_player__WEBPACK_IMPORTED_MODULE_1__.humanPlayer.board.receiveAttack(compXAttack, compYAttack);
 
   const attackedCell = playerBoardWrapper.querySelector(
     `[data-x="${compXAttack}"][data-y="${compYAttack}"]`
@@ -322,11 +402,13 @@ function compAttack() {
     attackedCell.classList.add("miss");
   }
 
-  if (_ui_player__WEBPACK_IMPORTED_MODULE_2__.playerBoard.allShipsSunk()) {
+  if (_ui_player__WEBPACK_IMPORTED_MODULE_1__.humanPlayer.board.allShipsSunk()) {
     console.log("All player ships have been sunk. Computer wins!");
-    // setTimeout(() => {
-    //   renderPlayerBoard(); // Reset and re-render the player board after a short delay
-    // }, 1000);
+    compPlayer.winner = true;
+    setTimeout(() => {
+      (0,_game__WEBPACK_IMPORTED_MODULE_2__.resetGame)();
+      (0,_game__WEBPACK_IMPORTED_MODULE_2__.startGame)();
+    }, 1000);
   }
 }
 
@@ -396,21 +478,13 @@ var __webpack_exports__ = {};
   !*** ./src/index.js ***!
   \**********************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _modules_gameboard__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/gameboard */ "./src/modules/gameboard.js");
-/* harmony import */ var _modules_ships__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/ships */ "./src/modules/ships.js");
-/* harmony import */ var _modules_players__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/players */ "./src/modules/players.js");
-/* harmony import */ var _modules_ui_comp__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/ui_comp */ "./src/modules/ui_comp.js");
-/* harmony import */ var _modules_ui_player__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/ui_ player */ "./src/modules/ui_ player.js");
-/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./style.css */ "./src/style.css");
+/* harmony import */ var _modules_game__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/game */ "./src/modules/game.js");
+/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./style.css */ "./src/style.css");
 
 
 
 
-
-
-
-(0,_modules_ui_comp__WEBPACK_IMPORTED_MODULE_3__.renderCompBoard)();
-(0,_modules_ui_player__WEBPACK_IMPORTED_MODULE_4__.renderPlayerBoard)();
+(0,_modules_game__WEBPACK_IMPORTED_MODULE_0__.startGame)();
 
 /******/ })()
 ;

@@ -5,6 +5,7 @@ class Gameboard {
     this.board = this.createBoard();
     this.ships = [];
     this.missedAttacks = [];
+    this.hitAttacks = [];
   }
   createBoard() {
     const rows = 10;
@@ -59,6 +60,7 @@ class Gameboard {
   receiveAttack(x, y) {
     if (this.board[y][x] instanceof Ship) {
       this.board[y][x].hit();
+      this.hitAttacks.push({ x, y }); // Add to hit coordinates
       return true;
     } else {
       this.board[y][x] = "miss";
@@ -76,12 +78,14 @@ class Gameboard {
   resetBoard() {
     this.ships.length = 0;
     this.missedAttacks.length = 0;
+    this.hitAttacks.length = 0;
     this.board = this.createBoard(); // Reset the board
   }
 
   isAlreadyAttacked(x, y) {
-    return this.missedAttacks.some(
-      (attack) => attack.x === x && attack.y === y
+    return (
+      this.missedAttacks.some((attack) => attack.x === x && attack.y === y) ||
+      this.hitAttacks.some((attack) => attack.x === x && attack.y === y)
     );
   }
 }
