@@ -1,6 +1,7 @@
 import { Gameboard } from "./gameboard";
 
 const playerBoardWrapper = document.querySelector(".player_board");
+
 const playerBoard = new Gameboard();
 
 function renderPlayerBoard() {
@@ -16,19 +17,4 @@ function renderPlayerBoard() {
   });
 }
 
-// function renderCompBoard() {
-//   compBoard.board.forEach((row, y) => {
-//     row.forEach((cell, x) => {
-//       const gridCell = document.createElement("div");
-//       gridCell.classList.add("comp-cell");
-//       gridCell.dataset.x = x;
-//       gridCell.dataset.y = y;
-
-//       compBoardWrapper.appendChild(gridCell);
-
-//       gridCell.addEventListener("click", handleCellClick);
-//     });
-//   });
-// }
-
-export { renderPlayerBoard };
+export { renderPlayerBoard, playerBoard };

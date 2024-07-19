@@ -72,6 +72,18 @@ class Gameboard {
       return false;
     } else return true;
   }
+
+  resetBoard() {
+    this.ships.length = 0;
+    this.missedAttacks.length = 0;
+    this.board = this.createBoard(); // Reset the board
+  }
+
+  isAlreadyAttacked(x, y) {
+    return this.missedAttacks.some(
+      (attack) => attack.x === x && attack.y === y
+    );
+  }
 }
 
 export { Gameboard };
