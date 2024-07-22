@@ -321,8 +321,8 @@ class Ship {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   handleCellClick: () => (/* binding */ handleCellClick),
 /* harmony export */   humanPlayer: () => (/* binding */ humanPlayer),
+/* harmony export */   playerClick: () => (/* binding */ playerClick),
 /* harmony export */   renderPlayerBoard: () => (/* binding */ renderPlayerBoard)
 /* harmony export */ });
 /* harmony import */ var _players__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./players */ "./src/modules/players.js");
@@ -354,7 +354,7 @@ function renderPlayerBoard() {
 }
 
 // Function to handle cell click event
-const handleCellClick = (event) => {
+const playerClick = (event) => {
   const x = parseInt(event.target.dataset.x);
   const y = parseInt(event.target.dataset.y);
   const attackResult = _ui_comp__WEBPACK_IMPORTED_MODULE_1__.compPlayer.board.receiveAttack(x, y);
@@ -363,7 +363,7 @@ const handleCellClick = (event) => {
   } else {
     event.target.classList.add("miss");
   }
-  event.target.removeEventListener("click", handleCellClick); // Remove event listener after click to prevent re-click
+  event.target.removeEventListener("click", playerClick); // Remove event listener after click to prevent re-click
 
   if (_ui_comp__WEBPACK_IMPORTED_MODULE_1__.compPlayer.board.allShipsSunk()) {
     console.log("All comp ships sunk");
@@ -424,7 +424,8 @@ function renderCompBoard() {
       //   gridCell.classList.add("test-class");
       // }
 
-      gridCell.addEventListener("click", _ui_player__WEBPACK_IMPORTED_MODULE_0__.handleCellClick);
+      // Add event listener to handle player action
+      gridCell.addEventListener("click", _ui_player__WEBPACK_IMPORTED_MODULE_0__.playerClick);
     });
   });
 }
@@ -539,7 +540,8 @@ __webpack_require__.r(__webpack_exports__);
 
 const startButton = document.getElementById("startbutton");
 
-startButton.addEventListener("click", () => {
+startButton.addEventListener("click", (e) => {
+  e.preventDefault();
   (0,_modules_game__WEBPACK_IMPORTED_MODULE_0__.startGame)();
   console.log("clicked the start button");
 });
