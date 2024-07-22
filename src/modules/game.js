@@ -29,6 +29,7 @@ function resetGame() {
 }
 
 function startGame() {
+  resetGame();
   renderCompBoard();
   renderPlayerBoard();
 }

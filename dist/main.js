@@ -60,6 +60,7 @@ function resetGame() {
 }
 
 function startGame() {
+  resetGame();
   (0,_ui_comp__WEBPACK_IMPORTED_MODULE_0__.renderCompBoard)();
   (0,_ui_player__WEBPACK_IMPORTED_MODULE_1__.renderPlayerBoard)();
 }
@@ -320,31 +321,22 @@ class Ship {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   handleCellClick: () => (/* binding */ handleCellClick),
 /* harmony export */   humanPlayer: () => (/* binding */ humanPlayer),
 /* harmony export */   renderPlayerBoard: () => (/* binding */ renderPlayerBoard)
 /* harmony export */ });
 /* harmony import */ var _players__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./players */ "./src/modules/players.js");
+/* harmony import */ var _ui_comp__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ui_comp */ "./src/modules/ui_comp.js");
+
 
 
 const playerBoardWrapper = document.querySelector(".player_board");
 
 let humanPlayer = new _players__WEBPACK_IMPORTED_MODULE_0__.Player();
 
-function placePlayerShips() {
-  humanPlayer.board.placeShip(2, 0, 0, true);
-  humanPlayer.board.placeShip(3, 0, 1, true);
-  humanPlayer.board.placeShip(4, 0, 2, true);
-  humanPlayer.board.placeShip(5, 0, 3, true);
-  humanPlayer.board.placeShip(6, 0, 4, true);
-
-  // compBoard.placeShip(battleShip.length, 0, 1, true);
-  // compBoard.placeShip(destroyerShip.length, 0, 2, true);
-  // compBoard.placeShip(submarineShip.length, 0, 3, true);
-  // compBoard.placeShip(patrolboatShip.length, 0, 4, true);
-}
-
 function renderPlayerBoard() {
-  placePlayerShips();
+  humanPlayer.board.randomPlaceAllShips();
+  // placePlayerShips();
   humanPlayer.board.board.forEach((row, y) => {
     row.forEach((cell, x) => {
       const gridCell = document.createElement("div");
@@ -361,6 +353,32 @@ function renderPlayerBoard() {
   });
 }
 
+// Function to handle cell click event
+const handleCellClick = (event) => {
+  const x = parseInt(event.target.dataset.x);
+  const y = parseInt(event.target.dataset.y);
+  const attackResult = _ui_comp__WEBPACK_IMPORTED_MODULE_1__.compPlayer.board.receiveAttack(x, y);
+  if (attackResult) {
+    event.target.classList.add("hit");
+  } else {
+    event.target.classList.add("miss");
+  }
+  event.target.removeEventListener("click", handleCellClick); // Remove event listener after click to prevent re-click
+
+  if (_ui_comp__WEBPACK_IMPORTED_MODULE_1__.compPlayer.board.allShipsSunk()) {
+    console.log("All comp ships sunk");
+    humanPlayer.winner = true;
+    setTimeout(() => {
+      resetGame();
+      startGame();
+    }, 1000);
+    // We return early so computer dont get another hit off after loosing
+    return;
+  }
+  // Return attack by computer defined in ui_comp.js
+  (0,_ui_comp__WEBPACK_IMPORTED_MODULE_1__.compAttack)();
+};
+
 
 
 
@@ -374,6 +392,7 @@ function renderPlayerBoard() {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   compAttack: () => (/* binding */ compAttack),
 /* harmony export */   compPlayer: () => (/* binding */ compPlayer),
 /* harmony export */   renderCompBoard: () => (/* binding */ renderCompBoard)
 /* harmony export */ });
@@ -401,38 +420,14 @@ function renderCompBoard() {
 
       compBoardWrapper.appendChild(gridCell);
 
-      if (cell !== null) {
-        gridCell.classList.add("test-class");
-      }
+      // if (cell !== null) {
+      //   gridCell.classList.add("test-class");
+      // }
 
-      gridCell.addEventListener("click", handleCellClick);
+      gridCell.addEventListener("click", _ui_player__WEBPACK_IMPORTED_MODULE_0__.handleCellClick);
     });
   });
 }
-
-// Function to handle cell click event
-const handleCellClick = (event) => {
-  const x = parseInt(event.target.dataset.x);
-  const y = parseInt(event.target.dataset.y);
-  console.log(x + " " + y);
-  const attackResult = compPlayer.board.receiveAttack(x, y);
-  if (attackResult) {
-    event.target.classList.add("hit");
-  } else {
-    event.target.classList.add("miss");
-  }
-  event.target.removeEventListener("click", handleCellClick); // Remove event listener after click to prevent re-click
-
-  if (compPlayer.board.allShipsSunk()) {
-    console.log("All comp ships sunk");
-    _ui_player__WEBPACK_IMPORTED_MODULE_0__.humanPlayer.winner = true;
-    setTimeout(() => {
-      (0,_game__WEBPACK_IMPORTED_MODULE_1__.resetGame)();
-      (0,_game__WEBPACK_IMPORTED_MODULE_1__.startGame)();
-    }, 1000);
-  }
-  compAttack();
-};
 
 function compAttack() {
   console.log("computer attacks...");
@@ -541,6 +536,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+const startButton = document.getElementById("startbutton");
+
+startButton.addEventListener("click", () => {
+  (0,_modules_game__WEBPACK_IMPORTED_MODULE_0__.startGame)();
+  console.log("clicked the start button");
+});
 
 (0,_modules_game__WEBPACK_IMPORTED_MODULE_0__.startGame)();
 
