@@ -15,3 +15,5 @@ Improving the computer AI.
 Listing status of game and gameboard in UI.
 Refactoring code to make it more modular and improve the dir structure.
 General improvement in UI design. Better colors, animations etc.
+
+Game is not fully tested.
