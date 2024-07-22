@@ -1,4 +1,4 @@
-import { humanPlayer, handleCellClick } from "./ui_ player";
+import { humanPlayer, playerClick } from "./ui_ player";
 import { resetGame, startGame } from "./game";
 import { Player } from "./players";
 
@@ -23,7 +23,8 @@ function renderCompBoard() {
       //   gridCell.classList.add("test-class");
       // }
 
-      gridCell.addEventListener("click", handleCellClick);
+      // Add event listener to handle player action
+      gridCell.addEventListener("click", playerClick);
     });
   });
 }

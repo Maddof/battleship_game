@@ -25,7 +25,7 @@ function renderPlayerBoard() {
 }
 
 // Function to handle cell click event
-const handleCellClick = (event) => {
+const playerClick = (event) => {
   const x = parseInt(event.target.dataset.x);
   const y = parseInt(event.target.dataset.y);
   const attackResult = compPlayer.board.receiveAttack(x, y);
@@ -34,7 +34,7 @@ const handleCellClick = (event) => {
   } else {
     event.target.classList.add("miss");
   }
-  event.target.removeEventListener("click", handleCellClick); // Remove event listener after click to prevent re-click
+  event.target.removeEventListener("click", playerClick); // Remove event listener after click to prevent re-click
 
   if (compPlayer.board.allShipsSunk()) {
     console.log("All comp ships sunk");
@@ -50,4 +50,4 @@ const handleCellClick = (event) => {
   compAttack();
 };
 
-export { renderPlayerBoard, humanPlayer, handleCellClick };
+export { renderPlayerBoard, humanPlayer, playerClick };
