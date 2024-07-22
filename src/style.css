@@ -35,6 +35,14 @@ body {
   border: 1px solid black;
 }
 
+.player-cell-ship {
+  background-color: rgb(128, 128, 128);
+}
+
+.test-class {
+  background-color: purple;
+}
+
 .hit {
   background-color: green;
 }

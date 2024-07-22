@@ -1,4 +1,6 @@
 import { Ship } from "./ships";
+import { getRandomBoolean } from "./helperfunctions";
+import { shipsGlobal } from "./game";
 
 class Gameboard {
   constructor() {
@@ -22,8 +24,14 @@ class Gameboard {
     return board;
   }
 
+  createShip(length) {
+    const ship = new Ship(length);
+    this.ships.push(ship);
+  }
+
   // Places and checks if it can place a ship
   // Returns true if placed
+
   placeShip(length, startX, startY, isHorizontal) {
     const ship = new Ship(length);
     if (this.canPlaceShip(length, startX, startY, isHorizontal)) {
@@ -55,6 +63,30 @@ class Gameboard {
       }
     }
     return true;
+  }
+
+  randomPlaceAllShips() {
+    // Randomly places all 5 types of ships on the board
+    let shipLength;
+    let x;
+    let y;
+    let randomOrientation;
+
+    shipsGlobal.forEach((ship) => {
+      let placed = false;
+      while (!placed) {
+        shipLength = ship.length;
+        x = Math.floor(Math.random() * 10);
+        y = Math.floor(Math.random() * 10);
+        randomOrientation = getRandomBoolean();
+        if (this.canPlaceShip(shipLength, x, y, randomOrientation)) {
+          this.placeShip(shipLength, x, y, randomOrientation);
+          placed = true;
+        } else {
+          placed = false;
+        }
+      }
+    });
   }
 
   receiveAttack(x, y) {

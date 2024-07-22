@@ -27,6 +27,10 @@ function renderPlayerBoard() {
       gridCell.dataset.y = y;
 
       playerBoardWrapper.appendChild(gridCell);
+
+      if (cell !== null) {
+        gridCell.classList.add("player-cell-ship");
+      }
     });
   });
 }

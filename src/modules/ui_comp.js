@@ -1,4 +1,3 @@
-import { Ship } from "./ships";
 import { humanPlayer } from "./ui_ player";
 import { resetGame, startGame } from "./game";
 import { Player } from "./players";
@@ -6,29 +5,11 @@ import { Player } from "./players";
 const compBoardWrapper = document.querySelector(".comp_board");
 const playerBoardWrapper = document.querySelector(".player_board");
 
-const carrierShip = new Ship(5);
-const battleShip = new Ship(4);
-const destroyerShip = new Ship(3);
-const submarineShip = new Ship(3);
-const patrolboatShip = new Ship(2);
-
 var compPlayer = new Player();
 
-console.log(compPlayer.board);
-
-function placeCompShips() {
-  compPlayer.board.placeShip(2, 0, 0, true);
-  // compBoard.placeShip(2, 0, 0, true);
-  // compBoard.placeShip(battleShip.length, 0, 1, true);
-  // compBoard.placeShip(destroyerShip.length, 0, 2, true);
-  // compBoard.placeShip(submarineShip.length, 0, 3, true);
-  // compBoard.placeShip(patrolboatShip.length, 0, 4, true);
-}
-
 function renderCompBoard() {
-  placeCompShips();
-  // compBoard.board.forEach((row, y) => {
-  // compPlayer.board.forEach((row, y) => {
+  compPlayer.board.randomPlaceAllShips();
+
   compPlayer.board.board.forEach((row, y) => {
     row.forEach((cell, x) => {
       const gridCell = document.createElement("div");
@@ -37,6 +18,10 @@ function renderCompBoard() {
       gridCell.dataset.y = y;
 
       compBoardWrapper.appendChild(gridCell);
+
+      if (cell !== null) {
+        gridCell.classList.add("test-class");
+      }
 
       gridCell.addEventListener("click", handleCellClick);
     });
