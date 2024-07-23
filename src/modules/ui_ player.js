@@ -1,5 +1,6 @@
 import { Player } from "./players";
 import { compPlayer, compAttack } from "./ui_comp";
+import { resetGame, startGame } from "./game";
 
 const playerBoardWrapper = document.querySelector(".player_board");
 

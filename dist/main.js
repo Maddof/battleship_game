@@ -327,6 +327,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _players__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./players */ "./src/modules/players.js");
 /* harmony import */ var _ui_comp__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ui_comp */ "./src/modules/ui_comp.js");
+/* harmony import */ var _game__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./game */ "./src/modules/game.js");
+
 
 
 
@@ -369,8 +371,8 @@ const playerClick = (event) => {
     console.log("All comp ships sunk");
     humanPlayer.winner = true;
     setTimeout(() => {
-      resetGame();
-      startGame();
+      (0,_game__WEBPACK_IMPORTED_MODULE_2__.resetGame)();
+      (0,_game__WEBPACK_IMPORTED_MODULE_2__.startGame)();
     }, 1000);
     // We return early so computer dont get another hit off after loosing
     return;
